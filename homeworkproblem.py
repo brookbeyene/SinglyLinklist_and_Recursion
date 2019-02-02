@@ -1,0 +1,107 @@
+import unittest
+import copy
+from colorama import Fore
+from colorama import Style
+
+'''
+Write a recursive method that takes 1) a string to find, 2) a string to replace the found string with, 
+and 3) an initial string. Return the initial string with all the found strings replaced with the replacement string. 
+You may not use loops or the built-in string methods except comparison, length, and slicing. Here is an outline.
+'''
+
+'''
+Description: Find a single string and replace it
+Author: Brook Beyene
+Version:
+Help received from: Prof. Beaty, stacksoverflow.com
+(people, URLs, etc.)
+Help provided to: Mutumba Tonny
+'''
+
+
+def findandreplace(find, replace, string):
+    # some debugging help
+    # print("find", find)
+    # print("replace", replace)
+    # print("string", string)
+
+    if not string:
+
+        print("The string is %s " % (Fore.BLUE + "None" + Fore.RESET))
+        print(Fore.BLUE + "This is the end of search" + Style.RESET_ALL
+              + "\n")
+
+        return string
+
+    if not find:
+
+        print("Find is %s" % (Fore.BLUE + "None" + Fore.RESET))
+        print(Fore.BLUE + "This is the end of search" + Style.RESET_ALL
+              + "\n")
+
+        return string
+
+    if replace is None:
+
+        print("Replace is %s" % (Fore.BLUE + "None" + Fore.RESET))
+        print(Fore.BLUE + "This is the end of search" + Style.RESET_ALL
+              + "\n")
+
+        return string
+
+    if string[:len(find)] == find:
+
+        print('The string to find is ' + Fore.RED + find + Fore.RESET
+              + ' within ' + Fore.RED + string + Fore.RESET + ' is found')
+
+        return replace + findandreplace(find, replace, string[len(find):])
+
+    else:
+
+        print('After looking for ' + Fore.RED + find + Fore.RESET
+              + ' in string is not found, inside of ' + Fore.RED + string + Fore.RESET)
+
+        if string.__len__() == 1:
+            print(Fore.BLUE + "This is the end of search" + Style.RESET_ALL
+                  + "\n")
+
+        return string[0] + findandreplace(find, replace, string[1:])
+
+
+class TestFindAndReplace(unittest.TestCase):
+
+    def test_all_none(self):
+        self.assertEqual(findandreplace(None, None, None), None)
+        # print("test all none")
+
+    def test_find_none(self):
+        self.assertEqual(findandreplace(None, "a", "aabb"), "aabb")
+        # print("test find none")
+
+    def test_find_empty(self):
+        self.assertEqual(findandreplace("", "a", "aabb"), "aabb")
+        # print("test find empty")
+
+    def test_replace_none(self):
+        self.assertEqual(findandreplace("a", None, "aabb"), "aabb")
+        # print("Test replace none")
+
+    def test_string_none(self):
+        self.assertEqual(findandreplace("a", "b", None), None)
+        # print("test string none")
+
+    def test_simple(self):
+        self.assertEqual(findandreplace("a", "z", "aabb"), "zzbb")
+        # print("test simple")
+
+    def test_remove(self):
+        self.assertEqual(findandreplace(" ", "", " a abb"), "aabb")
+        # print("this should be 2 aabb")
+
+    def test_gettysburg(self):
+        self.assertEqual(findandreplace("Four score", "Twenty", "Four score and seven years ago"),
+                         "Twenty and seven years ago")
+
+
+if __name__ == "__main__":
+    unittest.main()
